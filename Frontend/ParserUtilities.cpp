@@ -1,5 +1,7 @@
 #include "ParserUtilities.h"
 
+#include <algorithm>
+
 namespace ParserUtilities {
 	using std::string;
 	using std::vector;
@@ -20,9 +22,12 @@ namespace ParserUtilities {
 		return result;
 	}
 
-	bool isVariableAnArray(const std::string& variableName)
-	{
+	bool isVariableAnArray(const std::string& variableName)	{
 		int size = variableName.size();
 		return variableName[size - 1] == ']' && variableName[size - 3] == '[';
+	}
+
+	void trim(std::string& str) {
+		str.erase(std::remove_if(str.begin(), str.end(), std::isspace()));
 	}
 }
