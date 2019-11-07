@@ -42,7 +42,7 @@ enum class OpCode : std::uint8_t
 
 enum class OperandSize : std::uint8_t
 {
-	NOSIZE, 
+	NOSIZE = 0, 
 	BYTE,
 	WORD,
 	DWORD, 
@@ -51,7 +51,7 @@ enum class OperandSize : std::uint8_t
 
 enum class ArgType : std::uint8_t
 {
-	NUM, 
+	NUM = 0, 
 	GPR, 
 	AR, 
 	ADDRESS
@@ -59,7 +59,7 @@ enum class ArgType : std::uint8_t
 
 enum class Condition :std::uint8_t
 {
-	E, 
+	E = 0, 
 	Z, 
 	NE, 
 	NZ, 

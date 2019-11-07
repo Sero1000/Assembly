@@ -20,6 +20,9 @@ private:
 	template<typename T>
 	void createVariable(DataSection& dataSection,const std::string& name, const std::string& value) const;
 
+	template<>
+	void createVariable<char>(DataSection& dataSection, const std::string& name, const std::string& value) const;
+
 	template<typename T>
 	std::vector<T> getArrayFromLiteral(const std::string& values) const;
 };

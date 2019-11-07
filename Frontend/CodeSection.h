@@ -5,7 +5,8 @@
 #include "Function.h"
 
 class CodeSection {
-	CodeSection();
+public:
+	CodeSection() = default;
 
 	CodeSection(const CodeSection& other) = default;
 	CodeSection& operator=(const CodeSection& other) = default;

@@ -1,5 +1,6 @@
 #include "CodeParser.h"
 #include "ParserUtilities.h"
+#include "CodeSection.h"
 
 #include <string>
 
@@ -14,6 +15,8 @@ CodeSection CodeParser::Parse(std::ifstream& file) const {
 		defineFunction(name,file);
 		std::getline(file, line);
 	}
+
+	return CodeSection();
 }
 
 void CodeParser::defineFunction(const std::string& name,std::ifstream& file) const{
@@ -33,7 +36,6 @@ void CodeParser::defineFunction(const std::string& name,std::ifstream& file) con
 }
 
 Instruction CodeParser::parseInstruction(const StringVector& tokens) const {
-	Instruction instruction;
-
-
+	//TODO
+	return Instruction();
 }

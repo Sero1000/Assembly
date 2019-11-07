@@ -55,8 +55,6 @@ DataSection DataParser::parse(std::ifstream& fileStream) {
 
 			case 'q':
 			case 'Q': createVariable<QWORD>(dataSection,name, value); break;
-
-			default: throw ParserException("Invalid Type ");
 		}
 		std::getline(fileStream, line);
 	}
@@ -64,19 +62,12 @@ DataSection DataParser::parse(std::ifstream& fileStream) {
 	return dataSection;
 }
 
-template<typename T>
-void DataParser::createVariable(DataSection& dataSection,const std::string& name, const std::string& value) const{
-	StringVector numbers = ParserUtilities::split(value, ',');
-	vector<T> values = getArrayFromLiteral<T>(numbers);
-
-	dataSection.declareVariableOfType<T>(name, values);
-}
-
 template<>
-void DataParser::createVariable<char>(DataSection& dataSection,const std::string& name, const std::string& value) const {
-	std::vector<char> values = getArrayFromLiteral<char>(value);
+std::vector<char> DataParser::getArrayFromLiteral(const std::string& values) const {
+	std::vector<char> res;
+	std::for_each(values.begin(), values.end(), [&res](char ch) {res.push_back(ch); });
 
-	dataSection.declareVariableOfType<char>(name, values);
+	return res;
 }
 
 template<typename T>
@@ -90,9 +81,16 @@ std::vector<T> DataParser::getArrayFromLiteral(const std::string& values) const 
 }
 
 template<>
-std::vector<char> DataParser::getArrayFromLiteral<char>(const std::string& values) const {
-	std::vector<char> res;
-	std::for_each(values.begin(), values.end(), [&res](char ch) {res.push_back(ch); });
+void DataParser::createVariable<char>(DataSection& dataSection, const std::string& name, const std::string& value) const {
+	std::vector<char> values = getArrayFromLiteral<char>(value);
 
-	return res;
+	dataSection.declareVariableOfType<char>(name, values);
+}
+
+template<typename T>
+void DataParser::createVariable(DataSection& dataSection,const std::string& name, const std::string& value) const{
+	StringVector numbers = ParserUtilities::split(value, ',');
+	vector<T> values = getArrayFromLiteral<T>(numbers);
+
+	dataSection.declareVariableOfType<T>(name, values);
 }

@@ -28,6 +28,6 @@ namespace ParserUtilities {
 	}
 
 	void trim(std::string& str) {
-		str.erase(std::remove_if(str.begin(), str.end(), std::isspace()));
+		str.erase(std::remove_if(str.begin(), str.end(), std::isspace));
 	}
 }
