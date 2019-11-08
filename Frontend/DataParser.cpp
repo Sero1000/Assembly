@@ -41,20 +41,20 @@ DataSection DataParser::parse(std::ifstream& fileStream) {
 
 		switch (tokens[0][1])
 		{
-			case 'C':
-			case 'c': createVariable<CHAR>(dataSection,name, value); break;
-			
-			case 'B':
-			case 'b': createVariable<BYTE>(dataSection,name, value); break;
-			
-			case 'w':
-			case 'W': createVariable<WORD>(dataSection, name, value); break;
-			
-			case 'd':
-			case 'D': createVariable<DWORD>(dataSection, name, value); break;
+			//case 'C':
+			//case 'c': createVariable<CHAR>(dataSection,name, value); break;
+			//
+			//case 'B':
+			//case 'b': createVariable<BYTE>(dataSection,name, value); break;
+			//
+			//case 'w':
+			//case 'W': createVariable<WORD>(dataSection, name, value); break;
+			//
+			//case 'd':
+			//case 'D': createVariable<DWORD>(dataSection, name, value); break;
 
-			case 'q':
-			case 'Q': createVariable<QWORD>(dataSection,name, value); break;
+			//case 'q':
+			//case 'Q': createVariable<QWORD>(dataSection,name, value); break;
 		}
 		std::getline(fileStream, line);
 	}
@@ -90,7 +90,7 @@ void DataParser::createVariable<char>(DataSection& dataSection, const std::strin
 template<typename T>
 void DataParser::createVariable(DataSection& dataSection,const std::string& name, const std::string& value) const{
 	StringVector numbers = ParserUtilities::split(value, ',');
-	vector<T> values = getArrayFromLiteral<T>(numbers);
+	std::vector<T> values = getArrayFromLiteral<T>(numbers);
 
 	dataSection.declareVariableOfType<T>(name, values);
 }

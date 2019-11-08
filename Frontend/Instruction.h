@@ -54,12 +54,12 @@ enum class ArgType : std::uint8_t
 	NUM = 0, 
 	GPR, 
 	AR, 
-	ADDRESS
 };
 
 enum class Condition :std::uint8_t
 {
-	E = 0, 
+	NOCOND = 0,
+	E, 
 	Z, 
 	NE, 
 	NZ, 

@@ -1,5 +1,5 @@
 #include "CodeSection.h"
 
-void CodeSection::DefineFunction(Function& function) {
+void CodeSection::addFunction(Function& function) {
 	code_.emplace_back(function);
 }

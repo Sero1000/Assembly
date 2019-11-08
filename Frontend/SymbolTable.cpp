@@ -1,5 +1,6 @@
 #include "SymbolTable.h"
 
+#include <cassert>
 std::unordered_map<std::string, OperandSize>  SymbolTable::operandSizeTable_{
 	{"Byte",OperandSize::BYTE},
 	{"Word",OperandSize::WORD},
@@ -70,14 +71,36 @@ std::unordered_map<std::string, Condition>  SymbolTable::conditionTable_{
 	{"NS",Condition::NS},
 };
 
-OperandSize SymbolTable::getOperandSize(const std::string& operandSize) const {
-	return operandSizeTable_[operandSize];
+std::optional<OperandSize> SymbolTable::operandSize(const std::string& operandSize) {
+	auto iter = operandSizeTable_.find(operandSize);
+
+	if (iter == operandSizeTable_.end()) return std::make_optional<OperandSize>();
+
+	return std::make_optional(iter->second);
 }
 
-OpCode SymbolTable::getOperationCode(const std::string& operationCode) const {
-	return operationTable_[operationCode];
+std::optional<OpCode> SymbolTable::operationCode(const std::string& operationCode) {
+	auto iter = operationTable_.find(operationCode);
+
+	if (iter == operationTable_.end()) return std::make_optional<OpCode>();
+
+	return std::make_optional<OpCode>(iter->second);
 }
 
-Condition SymbolTable::getCondition(const std::string& conditionString) const {
-	return conditionTable_[conditionString];
+std::optional<Condition> SymbolTable::condition(const std::string& conditionString) {
+	auto iter = conditionTable_.find(conditionString);
+	
+	if (iter == conditionTable_.end()) return std::make_optional<Condition>();
+	
+	return std::make_optional(iter->second);
+}
+
+std::optional<ArgType> SymbolTable::argumentType(const std::string& argument) {
+	assert(argument.size() > 2);
+
+	switch (argument[0]) {
+		case 'R':	return ArgType::GPR; break;
+		case 'A':	return ArgType::AR; break;
+		default: return ArgType::NUM;		//TODO handle the case when is jibberish.
+	}
 }

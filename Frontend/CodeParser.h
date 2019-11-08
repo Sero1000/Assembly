@@ -16,7 +16,7 @@ public:
 
 	CodeSection Parse(std::ifstream& file) const;
 private:
-	void defineFunction(const std::string& name, std::ifstream& file) const; 
+	Function defineFunction(const std::string& name, std::ifstream& file) const; 
 
 	Instruction parseInstruction(const StringVector& tokens) const;
 };

@@ -14,7 +14,7 @@ public:
 	CodeSection(CodeSection&& other) = default;
 	CodeSection& operator=(CodeSection&& other) = default;
 
-	void DefineFunction(Function& function);
+	void addFunction(Function& function);
 
 private:
 	FunctionVector code_;

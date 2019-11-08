@@ -11,7 +11,7 @@
 
 class DataSection {
 public:
-	DataSection();
+	DataSection() = default;
 
 	DataSection(const DataSection& other) = default;
 	DataSection& operator=(const DataSection& other) = default;
