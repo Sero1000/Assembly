@@ -54,6 +54,7 @@ enum class ArgType : std::uint8_t
 	NUM = 0, 
 	GPR, 
 	AR, 
+	ADDRESS
 };
 
 enum class Condition :std::uint8_t

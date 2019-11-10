@@ -20,10 +20,15 @@ public:
 	static std::optional<OpCode> operationCode(const std::string&);
 	static std::optional<Condition> condition(const std::string&);
 	static std::optional<ArgType> argumentType(const std::string&);
+
+	static const std::string MainSectionHeader;
+	static const std::string DataSectionHeader;
+	static const std::string CodeSectionHeader;
+	static const std::string StackSectionHeader;
 private:
-	static std::unordered_map<std::string, OpCode> operationTable_;
-	static std::unordered_map<std::string, OperandSize> operandSizeTable_;
-	static std::unordered_map<std::string, Condition> conditionTable_;
+	static const std::unordered_map<std::string, OpCode> operationTable_;
+	static const std::unordered_map<std::string, OperandSize> operandSizeTable_;
+	static const std::unordered_map<std::string, Condition> conditionTable_;
 };
 
 #endif

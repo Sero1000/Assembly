@@ -5,26 +5,30 @@
 
 #include <string>
 
-CodeSection CodeParser::Parse(std::ifstream& file) const {
+CodeSection CodeParser::parse(std::ifstream& file,const DataSection& dataSection) const {
 	CodeSection codeSection;
 	
 	std::string line = "";
 
 	std::getline(file, line);
 	while (line != "") {
+		if (line.empty()) { std::getline(file, line); continue; }
+
 		StringVector tokens = ParserUtilities::split(line);
 		std::string name = tokens[1];
 
-		Function function = defineFunction(name,file);
+		Function function;
+		if(tokens.size() != 2)
+			function = defineFunction(name, file,dataSection);
 		codeSection.addFunction(function);
-
+		
 		std::getline(file, line);
 	}
 
 	return codeSection;
 }
 
-Function CodeParser::defineFunction(const std::string& name,std::ifstream& file) const{
+Function CodeParser::defineFunction(const std::string& name,std::ifstream& file,const DataSection& dataSection) const{
 	std::string line;
 	std::getline(file, line);
 
@@ -32,7 +36,7 @@ Function CodeParser::defineFunction(const std::string& name,std::ifstream& file)
 
 	while (line != "ENDF") {
 		StringVector tokens = ParserUtilities::split(line);
-		Instruction instruction = parseInstruction(tokens);
+		Instruction instruction = parseInstruction(tokens,dataSection);
 
 		function.appendInstruction(instruction);
 		
@@ -42,7 +46,7 @@ Function CodeParser::defineFunction(const std::string& name,std::ifstream& file)
 	return std::move(function);
 }
 
-Instruction CodeParser::parseInstruction(const StringVector& tokens) const {
+Instruction CodeParser::parseInstruction(const StringVector& tokens,const DataSection& dataSection) const {
 	Instruction instruction;
 
 	//TODO a lot of if/elses
@@ -90,6 +94,9 @@ Instruction CodeParser::parseInstruction(const StringVector& tokens) const {
 	if (instruction.argType1_ == ArgType::NUM) {
 		instruction.arg1_ = std::stoi(tokens[firstArgIndex]);
 	}
+	else if (instruction.argType1_ == ArgType::ADDRESS) {
+		instruction.arg1_ = dataSection.addressOf(tokens[firstArgIndex]);
+	}
 	else {
 		const std::string& argInString = tokens[secondArgIndex];
 		instruction.arg1_ = std::stoi(std::string(argInString.begin() + 1, argInString.end()));
@@ -97,6 +104,9 @@ Instruction CodeParser::parseInstruction(const StringVector& tokens) const {
 
 	if (instruction.argType2_ == ArgType::NUM) {
 		instruction.arg2_ = std::stoi(tokens[firstArgIndex]);
+	}
+	else if (instruction.argType2_ == ArgType::ADDRESS) {
+		instruction.arg2_ = dataSection.addressOf(tokens[secondArgIndex]);
 	}
 	else {
 		const std::string& argInString = tokens[secondArgIndex];

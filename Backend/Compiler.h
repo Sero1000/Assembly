@@ -2,6 +2,7 @@
 #define COMPILER_H
 
 #include "../Frontend/DataParser.h"
+#include "../Frontend/CodeParser.h"
 
 #include <fstream>
 
@@ -14,7 +15,7 @@ private:
 	void write(std::ofstream& outputFile,const ByteVector&) const;
 private:
 	DataParserUPtr dataParser_;
-
+	CodeParserUPtr codeParser_;
 };
 
 #endif

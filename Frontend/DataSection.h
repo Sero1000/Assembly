@@ -22,7 +22,9 @@ public:
 	template<typename T>
 	void declareVariableOfType(const std::string& name, std::vector<T>& values);
 
-	const ByteVector& Data() const { return data_; }
+	const ByteVector& data() const { return data_; }
+
+	int addressOf(const std::string& name) const { return namesAndAdresses_.find(name)->second; }
 
 private:
 	template<typename T>

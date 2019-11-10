@@ -13,5 +13,6 @@ using QWORD = std::uint64_t;
 
 using StringVector = std::vector<std::string>;
 using ByteVector = std::vector<BYTE>;
+using CharVector = std::vector<CHAR>;
 
 #endif

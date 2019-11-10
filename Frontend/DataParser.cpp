@@ -1,33 +1,40 @@
 #include "DataParser.h"
 #include "ParserUtilities.h"
 #include "TypeDefs.h"
+#include "SymbolTable.h"
 
 #include <string>
 #include <fstream>
-
-using std::string;
 
 DataParser::DataParser() {
 
 }
 
+template<>
+void DataParser::createVariable<CHAR>(DataSection& dataSection, const std::string& name, const std::string& value) const {
+	CharVector values = getArrayFromLiteral(value);
+
+	dataSection.declareVariableOfType<CHAR>(name, values);
+}
+
 DataSection DataParser::parse(std::ifstream& fileStream) {
 	DataSection dataSection;
 
-	string line;
+	std::string line;
 
-	while (line != ".Data") {
+	while (line != SymbolTable::DataSectionHeader) {
 		std::getline(fileStream, line);
 	}
 
 	std::getline(fileStream, line);
-	while (line != ".CODE" ) {
+	while (line != SymbolTable::CodeSectionHeader) {
+		if (line.empty()) { std::getline(fileStream, line); continue; }//ignore empty lines
 
 		StringVector tokens = ParserUtilities::split(line);
-		string name = tokens[1];
+		std::string name = tokens[1];
 		bool isArray = ParserUtilities::isVariableAnArray(name);
 
-		string value;
+		std::string value;
 		if (tokens.size() > 3) {
 			value = tokens[3];
 		}
@@ -38,23 +45,23 @@ DataSection DataParser::parse(std::ifstream& fileStream) {
 		if (isArray) {
 			name.erase(name.end() - 3, name.end());
 		}
-
-		switch (tokens[0][1])
+		
+		switch (tokens[0][0])
 		{
-			//case 'C':
-			//case 'c': createVariable<CHAR>(dataSection,name, value); break;
-			//
-			//case 'B':
-			//case 'b': createVariable<BYTE>(dataSection,name, value); break;
-			//
-			//case 'w':
-			//case 'W': createVariable<WORD>(dataSection, name, value); break;
-			//
-			//case 'd':
-			//case 'D': createVariable<DWORD>(dataSection, name, value); break;
+			case 'C':
+			case 'c': createVariable<CHAR>(dataSection,name, value); break;
+			
+			case 'B':
+			case 'b': createVariable<BYTE>(dataSection,name, value); break;
+			
+			case 'w':
+			case 'W': createVariable<WORD>(dataSection, name, value); break;
+			
+			case 'd':
+			case 'D': createVariable<DWORD>(dataSection, name, value); break;
 
-			//case 'q':
-			//case 'Q': createVariable<QWORD>(dataSection,name, value); break;
+			case 'q':
+			case 'Q': createVariable<QWORD>(dataSection,name, value); break;
 		}
 		std::getline(fileStream, line);
 	}
@@ -62,29 +69,21 @@ DataSection DataParser::parse(std::ifstream& fileStream) {
 	return dataSection;
 }
 
-template<>
-std::vector<char> DataParser::getArrayFromLiteral(const std::string& values) const {
-	std::vector<char> res;
-	std::for_each(values.begin(), values.end(), [&res](char ch) {res.push_back(ch); });
+CharVector DataParser::getArrayFromLiteral(const std::string& values) const {
+	std::vector<CHAR> res;
+	std::for_each(values.begin() + 1, values.end() - 1, [&res](char ch) {res.push_back(ch); });
 
 	return res;
 }
 
 template<typename T>
-std::vector<T> DataParser::getArrayFromLiteral(const std::string& values) const {
+std::vector<T> DataParser::getArrayFromLiteral(const StringVector& values) const {
 	std::vector<T> res;
 	for (auto iter = values.cbegin(); iter != values.cend(); ++iter) {
 		res.push_back(static_cast<T>(std::stol(*iter)));
 	}
 
 	return res;
-}
-
-template<>
-void DataParser::createVariable<char>(DataSection& dataSection, const std::string& name, const std::string& value) const {
-	std::vector<char> values = getArrayFromLiteral<char>(value);
-
-	dataSection.declareVariableOfType<char>(name, values);
 }
 
 template<typename T>
