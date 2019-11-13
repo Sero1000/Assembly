@@ -17,8 +17,8 @@ public:
 	Function(Function&& other) = default;
 	Function& operator=(Function&& other) = default;
 
-	std::string Name() const { return name_; }
-	InstructionVector Code() const { return code_; }
+	std::string name() const { return name_; }
+	InstructionVector code() const { return code_; }
 
 	void appendInstruction(const Instruction& instruction);
 

@@ -11,7 +11,7 @@ CodeSection CodeParser::parse(std::ifstream& file,const DataSection& dataSection
 	std::string line = "";
 
 	std::getline(file, line);
-	while (line != "") {
+	while (line != SymbolTable::MainSectionHeader) {
 		if (line.empty()) { std::getline(file, line); continue; }
 
 		StringVector tokens = ParserUtilities::split(line);

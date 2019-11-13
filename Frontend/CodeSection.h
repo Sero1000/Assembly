@@ -16,6 +16,9 @@ public:
 
 	void addFunction(Function& function);
 
+	int addressOf(const std::string& functionName) const;
+
+	bool functionDeclared(const std::string& functionName) const;
 private:
 	FunctionVector code_;
 };
