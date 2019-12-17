@@ -6,6 +6,7 @@
 #include <string>
 
 class Function {
+	friend void operator<<(std::fstream& file, const Function& function);
 public:
 	Function(const std::string& name);
 
@@ -18,7 +19,7 @@ public:
 	Function& operator=(Function&& other) = default;
 
 	std::string name() const { return name_; }
-	InstructionVector code() const { return code_; }
+	size_t size() const { return code_.size(); }
 
 	void appendInstruction(const Instruction& instruction);
 

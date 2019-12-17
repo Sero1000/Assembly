@@ -5,18 +5,24 @@
 #include "../Frontend/CodeSection.h"
 #include "../Frontend/CodeParser.h"
 
-Compiler::Compiler():dataParser_(new DataParser()),codeParser_(new CodeParser())
+Compiler::Compiler()
+	:stackParser_(std::make_unique<StackParser>())
+	,dataParser_(std::make_unique<DataParser>())
+	,codeParser_(std::make_unique<CodeParser>())
+	,mainParser_(std::make_unique<MainParser>())
 {
 
 }
 
 void Compiler::compile(std::ifstream& fileStream) {
+	StackSection stackSection = stackParser_->parse(fileStream);
 	DataSection dataSection = dataParser_->parse(fileStream);
 	CodeSection codeSection = codeParser_->parse(fileStream,dataSection);
+	MainSection mainSection = mainParser_->parse(fileStream,codeSection);
 
-	std::ofstream outputfile("out.asm", std::ios_base::binary | std::ios_base::out);
+	std::fstream outputfile("out.asm", std::ios_base::binary | std::ios_base::out);
 
-	write(outputfile, dataSection.data());
+	outputfile << stackSection << dataSection << codeSection << mainSection;
 }
 
 void Compiler::write(std::ofstream& outputFile,const ByteVector& byteVector) const {

@@ -6,10 +6,12 @@
 #include <vector>
 #include <algorithm>
 #include <memory>
+#include <fstream>
 
 #include "TypeDefs.h"
 
 class DataSection {
+	friend std::fstream& operator<<(std::fstream& file, const DataSection& dataSection);
 public:
 	DataSection() = default;
 
@@ -22,9 +24,7 @@ public:
 	template<typename T>
 	void declareVariableOfType(const std::string& name, std::vector<T>& values);
 
-	const ByteVector& data() const { return data_; }
-
-	int addressOf(const std::string& name) const { return namesAndAdresses_.find(name)->second; }
+	int addressOf(const std::string& name) const;
 
 private:
 	template<typename T>
@@ -60,5 +60,7 @@ void DataSection::writeInData(int index, std::vector<T>& values) {
 		index += sizeof(T);
 	}
 }
+
+std::fstream& operator<<(std::fstream& file, const DataSection& dataSection);
 
 #endif

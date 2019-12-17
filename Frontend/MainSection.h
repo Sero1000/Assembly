@@ -6,6 +6,7 @@
 #include <fstream>
 
 class MainSection {
+	friend std::fstream& operator<<(std::fstream& file, const MainSection& mainSection);
 public:
 	MainSection(int address);
 
@@ -17,7 +18,9 @@ public:
 	MainSection(MainSection&& other) = default;
 	MainSection& operator=(MainSection&& other) = default;
 private:
-	int m_mainFunctionAddress;
+	int mainFunctionAddress_;
 };
+
+std::fstream& operator<<(std::fstream& file, const MainSection& mainSection);
 
 #endif

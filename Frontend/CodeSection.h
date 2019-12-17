@@ -5,6 +5,7 @@
 #include "Function.h"
 
 class CodeSection {
+	friend std::fstream& operator<<(std::fstream& file, const CodeSection& codeSection);
 public:
 	CodeSection() = default;
 
@@ -22,5 +23,7 @@ public:
 private:
 	FunctionVector code_;
 };
+
+std::fstream& operator<<(std::fstream& file, const CodeSection& codeSection);
 
 #endif
